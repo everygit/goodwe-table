@@ -69,7 +69,10 @@ new Vue({
                         ...{
                             scopedSlots: {
                                 'default': props => {
-                                    return <div style="color:#ff0000">{props.row.b}{props.row.b}{props.row.b}{props.row.b}{props.row.b}</div>
+                                    return <div style="color:#999999;text-decoration:line-through">{props.row.b} 元</div>
+                                },
+                                header: props => {
+                                    return <div style="color:#ff0000;font-weight:bold;font-style:italic">{props.column.label}</div>
                                 }
                             }
                         }

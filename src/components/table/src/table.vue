@@ -219,14 +219,19 @@ export default {
         add(item, index) {
             this.columns.splice(index, 0, item);
         },
-        renderHeaderItem(column) {
+        renderHeaderItem(column, idx) {
             var r = column;
             if (r.rowspan == 0 || r.colspan == 0) {
                 return null;
             }
             return (
                 <th rowspan={r.rowspan} colspan={r.colspan}>
-                    {r.label}
+                    {
+                        r.column.$scopedSlots.header ? r.column.$scopedSlots.header({
+                            column: r.column,
+                            $index: idx
+                        }) : r.label
+                    }
                 </th>
             );
         },
@@ -237,7 +242,7 @@ export default {
     computed: {
         headerRender() {
             return this.rowcols.map(row => (
-                <tr>{row.map(m => this.renderHeaderItem(m))}</tr>
+                <tr>{row.map((m, i) => this.renderHeaderItem(m, i))}</tr>
             ));
         },
         bodyRender() {

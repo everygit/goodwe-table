@@ -50,3 +50,10 @@ export default {
  max-height|暂不支持|string / number |-|-
  stripe|是否为斑马纹 table|boolean|-|false
  border|是否带有纵向边框。 多级表头时固定为true|boolean|-|false
+
+ Table-column Scoped Slot
+
+ name | 说明
+ -|-
+ --| 自定义列的内容，参数为 { row, column, $index }
+ header | 自定义表头的内容. 参数为 { column, $index }
