@@ -226,12 +226,12 @@ export default {
             }
             return (
                 <th rowspan={r.rowspan} colspan={r.colspan}>
-                    {
-                        r.column.$scopedSlots.header ? r.column.$scopedSlots.header({
-                            column: r.column,
-                            $index: idx
-                        }) : r.label
-                    }
+                    {r.column.$scopedSlots.header
+                        ? r.column.$scopedSlots.header({
+                              column: r.column,
+                              $index: idx
+                          })
+                        : r.label}
                 </th>
             );
         },
@@ -251,13 +251,13 @@ export default {
                     <tr>
                         {this.realColumns.map((c, idx) => (
                             <td>
-                                {
-                                    c.column.$scopedSlots.default ? c.column.$scopedSlots.default({
-                                        row: d,
-                                        column: c.column,
-                                        $index: i
-                                    }) : d[c.column.prop]
-                                }
+                                {c.column.$scopedSlots.default
+                                    ? c.column.$scopedSlots.default({
+                                          row: d,
+                                          column: c.column,
+                                          $index: i
+                                      })
+                                    : d[c.column.prop]}
                             </td>
                         ))}
                     </tr>
@@ -289,9 +289,7 @@ export default {
             <div class={cls}>
                 <div>{this.$slots.default}</div>
                 <table class="goodwe-table-table">
-                    <thead>{
-                        this.showHeader ? this.headerRender : null
-                    }</thead>
+                    <thead>{this.showHeader ? this.headerRender : null}</thead>
                     <tbody>{this.bodyRender}</tbody>
                 </table>
             </div>
@@ -306,6 +304,11 @@ export default {
         border-collapse: collapse;
         table-layout: fixed;
         font-size: 14px;
+        tr:hover {
+            td {
+                background-color: #f5f7fa;
+            }
+        }
         th {
             border-bottom: 1px solid #ebeef5;
             white-space: nowrap;
@@ -319,6 +322,7 @@ export default {
             // word-break: break-all;
             white-space: nowrap;
             color: #606266;
+
             &.no-data {
                 height: 50px;
                 text-align: center;
@@ -331,6 +335,11 @@ export default {
                 tr:nth-child(2n) {
                     td {
                         background-color: #fafafa;
+                    }
+                }
+                tr:hover {
+                    td {
+                        background-color: #f5f7fa;
                     }
                 }
             }
