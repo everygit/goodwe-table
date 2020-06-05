@@ -260,8 +260,13 @@ export default {
         console.log(this.data);
     },
     render() {
+        var cls = ["goodwe-table"];
+        if (this.stripe) {
+            cls.push("goodwe-table__stripe");
+        }
+
         return (
-            <div class="goodwe-table">
+            <div class={cls}>
                 <div>{this.$slots.default}</div>
                 <table class="goodwe-table-table">
                     <thead>{this.headerRender}</thead>
@@ -277,22 +282,37 @@ export default {
     &-table {
         min-width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
+        font-size: 14px;
         th {
-            border: 1px solid #dddddd;
+            border: 1px solid #ebeef5;
             white-space: nowrap;
             padding: 15px 20px;
+            color: #909399;
         }
         td {
-            border: 1px solid #dddddd;
+            border: 1px solid #ebeef5;
             padding: 16px 15px;
             // word-wrap: break-word;
             // word-break: break-all;
             white-space: nowrap;
+            color: #606266;
             &.no-data {
                 height: 50px;
                 text-align: center;
             }
         }
     }
+    &__stripe {
+            table {
+                tbody {
+                    tr:nth-child(2n) {
+                        td {
+                            background-color: #fafafa;
+                        }
+                    }
+                }
+            }
+        }
 }
 </style>

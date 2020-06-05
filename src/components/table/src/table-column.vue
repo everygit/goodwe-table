@@ -29,9 +29,9 @@ export default {
         minWidth: String,
         maxWidth: String,
         fixed: {
-            type: [String, Boolean],
+            type: [Boolean, String],
             validator(value) {
-                return [true, "left", "right"].indexOf(value) !== -1;
+                return [true, false, "left", "right"].indexOf(value) !== -1;
             }
         },
         renderHeader: Function,
@@ -102,8 +102,19 @@ export default {
     computed: {
         table() {
             var r = this;
-            while (r && r.$options.name == "goodwe-table-column") {
+            while (r) {
+                if(r.$options.name == "goodwe-table") {
+                    break;
+                }
                 r = r.$parent;
+            }
+            return r;
+        },
+        parentColumn() {
+            var r = this;
+            while(r) {
+                r = r.$parent;
+                if(r.$options.name == 'goodwe-table-column' || r.$options.name == 'goodwe-table') break;
             }
             return r;
         }
