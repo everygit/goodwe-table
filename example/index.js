@@ -11,32 +11,32 @@ var d = [
         c: "21.50",
         ms: "10.00",
         d: "https://item.jd.com/12586572.html",
-        dd:"http://product.dangdang.com/24228859.html",
-        sd:"新华书店"
+        dd: "http://product.dangdang.com/24228859.html",
+        sd: "新华书店"
     }, {
         a: "红与黑",
         b: "42.00",
         c: "37.80",
         ms: "10.00",
         d: "https://item.jd.com/12052514.html",
-        dd:"http://product.dangdang.com/24228859.html",
-        sd:"新华书店"
+        dd: "http://product.dangdang.com/24228859.html",
+        sd: "新华书店"
     }, {
         a: "茶花女",
         b: "32.80",
         c: "21.75",
         ms: "10.00",
         d: "https://item.jd.com/12586572.html",
-        dd:"http://product.dangdang.com/24228859.html",
-        sd:"新华书店"
+        dd: "http://product.dangdang.com/24228859.html",
+        sd: "新华书店"
     }, {
         a: "悲惨的世界",
         b: "77.20",
         c: "44.80",
         ms: "10.00",
         d: "https://item.jd.com/12586572.html",
-        dd:"http://product.dangdang.com/24228859.html",
-        sd:"新华书店"
+        dd: "http://product.dangdang.com/24228859.html",
+        sd: "新华书店"
     }
 ]
 
@@ -44,7 +44,7 @@ new Vue({
     el: '#app',
     data() {
         return {
-            d,
+            d: d,
             t: false
         }
     },
@@ -65,7 +65,16 @@ new Vue({
             <goodwe-table data={this.d} stripe height="100px" max-height="200px">
                 <goodwe-table-column label="书名" prop="a"></goodwe-table-column>
                 <goodwe-table-column label="售价" prop="c">
-                    <goodwe-table-column label="原价" prop="b"></goodwe-table-column>
+                    <goodwe-table-column label="原价" prop="b" {
+                        ...{
+                            scopedSlots: {
+                                'default': props => {
+                                    return <div style="color:#ff0000">{props.row.b}{props.row.b}{props.row.b}{props.row.b}{props.row.b}</div>
+                                }
+                            }
+                        }
+                    }>
+                    </goodwe-table-column>
                     <goodwe-table-column label="会员" prop="c"></goodwe-table-column>
                     {
                         this.t ? <goodwe-table-column label="秒杀" prop="ms"></goodwe-table-column> : null

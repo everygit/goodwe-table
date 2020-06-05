@@ -241,18 +241,26 @@ export default {
             ));
         },
         bodyRender() {
-            if (this.data.length > 0) {
+            if (this.data && this.data.length > 0) {
                 return this.data.map((d, i) => (
                     <tr>
-                        {this.realColumns.map(c => (
-                            <td>{d[c.column.prop]}</td>
+                        {this.realColumns.map((c, idx) => (
+                            <td>
+                                {
+                                    c.column.$scopedSlots.default ? c.column.$scopedSlots.default({
+                                        row: d,
+                                        column: c.column,
+                                        $index: i
+                                    }) : d[c.column.prop]
+                                }
+                            </td>
                         ))}
                     </tr>
                 ));
             } else {
                 return (
                     <tr>
-                        <td class="no-data" colspan="6">
+                        <td class="no-data" colspan={this.realColumns.length}>
                             暂无数据
                         </td>
                     </tr>
