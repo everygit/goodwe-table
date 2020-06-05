@@ -43,22 +43,25 @@ export default {
 
 ## goodwe-table Attributes
 
- 参数|说明|类型|可选值|默认值
- -|-|-|-|-
- data|显示的数据|array|-|-
- height|暂不支持|string / number|-|-
- max-height|暂不支持|string / number |-|-
- stripe|是否为斑马纹 table|boolean|-|false
- border|是否带有纵向边框。 多级表头时固定为true|boolean|-|false
+参数|说明|类型|可选值|默认值
+-|-|-|-|-
+data|显示的数据|array|-|-
+height|暂不支持|string / number|-|-
+max-height|暂不支持|string / number |-|-
+stripe|是否为斑马纹 table|boolean|-|false
+border|是否带有纵向边框。 多级表头时固定为true|boolean|-|false
+highlight-current-row|	是否要高亮当前行|	boolean| —|	false
+row-class-name|	行的 className 的回调方法，也可以使用字符串为所有行设置一个固定的 className。|	Function({row, rowIndex})/String|	—|	—
 
- ## Table-column Scoped Slot
+## Table-column Scoped Slot
 
- name | 说明
- -|-
- --| 自定义列的内容，参数为 { row, column, $index }
- header | 自定义表头的内容. 参数为 { column, $index }
+name | 说明
+-|-
+--| 自定义列的内容，参数为 { row, column, $index }
+header | 自定义表头的内容. 参数为 { column, $index }
 
- ## Table Events
+## Table Events
+
 事件名 |	说明|	参数
 -|-|-
 cell-click|	当某个单元格被点击时会触发该事件	|row, column, cell, event

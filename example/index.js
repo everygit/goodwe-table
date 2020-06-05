@@ -55,6 +55,11 @@ new Vue({
     methods: {
         cellclick(row, column, cell, event) {
             console.log(cell);
+        },
+        rowclassname(a) {
+            if(a.rowIndex == 1) {
+                return 'haha'
+            }
         }
     },
     mounted() {
@@ -68,6 +73,8 @@ new Vue({
     render(h) {
         return <div>
             <goodwe-table data={this.d} show-header={true}
+            highlight-current-row = {true}
+            row-class-name={this.rowclassname}
                 on-cell-click={(row, col, cell, ev) => this.cellclick(row, col, cell, ev)}
                 on-row-click={(row, column) => console.log(row, column)}
                 stripe height="100px" max-height="200px">
@@ -81,7 +88,7 @@ new Vue({
                                     return <div style="color:#999999;text-decoration:line-through">{props.row.b} 元</div>
                                 },
                                 header: props => {
-                                    return <div style="color:#ff0000;font-weight:bold;font-style:italic">{props.column.label}</div>
+                                    return <div style="color:#ff0000;font-weight:bold;font-style:italic">{props.column.label}++</div>
                                 }
                             }
                         }

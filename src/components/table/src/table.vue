@@ -247,7 +247,7 @@ export default {
             this.selectedIndex = rowIndex;
             this.$emit("row-click", row, column.column, event);
             this.$emit("cell-click", row, column.column, event.target, event);
-            this.$emit('current-change', row, (this.data || [])[oldIndex]);
+            this.$emit("current-change", row, (this.data || [])[oldIndex]);
         }
     },
     computed: {
@@ -259,7 +259,12 @@ export default {
         bodyRender() {
             if (this.data && this.data.length > 0) {
                 return this.data.map((d, i) => (
-                    <tr class={{ selected: i == this.selectedIndex }}>
+                    <tr
+                        class={[
+                            this.highlightCurrentRow && i == this.selectedIndex ? 'selected': '',
+                            this.rowClassName && this.rowClassName({row:d, rowIndex:i})
+                        ]}
+                    >
                         {this.realColumns.map((c, idx) => (
                             <td on-click={e => this.rowClick(d, c, i, idx, e)}>
                                 {c.column.$scopedSlots.default
