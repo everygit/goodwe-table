@@ -53,16 +53,16 @@ new Vue({
         GoodweTableColumn
     },
     mounted() {
-        setTimeout(() => {
-            this.t = true
-        }, 3000);
-        setTimeout(() => {
-            this.t = false
-        }, 8000);
+        // setTimeout(() => {
+        //     this.t = true
+        // }, 3000);
+        // setTimeout(() => {
+        //     this.t = false
+        // }, 8000);
     },
     render(h) {
         return <div>
-            <goodwe-table data={this.d}>
+            <goodwe-table data={this.d} height="100px" max-height="200px">
                 <goodwe-table-column label="书名" prop="a"></goodwe-table-column>
                 <goodwe-table-column label="售价" prop="c">
                     <goodwe-table-column label="原价" prop="b"></goodwe-table-column>

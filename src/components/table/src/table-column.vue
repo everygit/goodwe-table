@@ -16,7 +16,77 @@ export default {
         prop: {
             type: String,
             default: ""
-        }
+        },
+        type: {
+            type: String,
+            validator(value) {
+                return ["selection", "index", "expand"].indexOf(value) !== -1;
+            }
+        },
+        index: [Number, Function],
+        columnKey: String,
+        width: String,
+        minWidth: String,
+        maxWidth: String,
+        fixed: {
+            type: [String, Boolean],
+            validator(value) {
+                return [true, "left", "right"].indexOf(value) !== -1;
+            }
+        },
+        renderHeader: Function,
+        sortable: {
+            type: [String, Boolean],
+            default: false,
+            validator(value) {
+                return [true, false, "custom"].indexOf(value) !== -1;
+            }
+        },
+        sortMethods: Function,
+        sortBy: [String, Array, Function],
+        sortOrders: {
+            type: Array,
+            default: function() {
+                return ["ascending", "descending", null];
+            }
+        },
+        resizable: {
+            type: Boolean,
+            default: true
+        },
+        formatter: Function,
+        showOverflowTooltip: {
+            type: Boolean,
+            default: false
+        },
+        align: {
+            type: String,
+            default: "left",
+            validator(value) {
+                return ["left", "center", "right"].indexOf(value) !== -1;
+            }
+        },
+        headerAlign: {
+            type: String,
+            validator(value) {
+                return ["left", "center", "right"].indexOf(value) !== -1;
+            }
+        },
+        className: String,
+        labelClassName: String,
+        selectable: Function,
+        reserveSelection: {
+            type: Boolean,
+            default: false
+        },
+        filters: Array,
+        filterPlacement: String,
+        filterMultiple: {
+            type: Boolean,
+            default: true
+        },
+        filterMethod: Function,
+        filteredValue: Array
     },
     methods: {
         remove(item) {
