@@ -112,15 +112,18 @@ export default {
         },
         parentColumn() {
             var r = this;
+            var o = this;
             while(r) {
+                o = r;
                 r = r.$parent;
                 if(r.$options.name == 'goodwe-table-column' || r.$options.name == 'goodwe-table') break;
             }
-            return r;
+            return [r, o];
         }
     },
     created() {
         this.id = columnID++;
+        var [p, k] = this.parentColumn;
         var index = this.$parent.$children.indexOf(this);
         this.$parent.add && this.$parent.add(this, index);
         this.table.updateLayout();

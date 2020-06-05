@@ -7,7 +7,8 @@ export default {
             columns: [],
             realColumns: [],
             headerLevel: 1,
-            rowcols: []
+            rowcols: [],
+            isMultiple: false
         };
     },
     props: {
@@ -142,6 +143,7 @@ export default {
             var allColumns = [];
             // 层级
             var level = 1;
+            var isMultiple = false;
             var _getHeadData = function _getHeadData(
                 columns,
                 curLevel,
@@ -150,6 +152,7 @@ export default {
                 columns.forEach((m, i) => {
                     if (m.columns.length > 0) {
                         _getHeadData(m.columns, curLevel + 1, m);
+                        isMultiple = true;
                     } else {
                         level = Math.max(level, curLevel);
                         allColumns.push({
@@ -163,6 +166,7 @@ export default {
             _getHeadData(this.columns, 0);
             this.realColumns = allColumns;
             this.headerLevel = level;
+            this.isMultiple = isMultiple;
             var rowcols = [];
             var hasColspan = {};
             for (var i = level; i >= 0; i--) {
@@ -264,6 +268,9 @@ export default {
         if (this.stripe) {
             cls.push("goodwe-table__stripe");
         }
+        if (this.border || this.isMultiple) {
+            cls.push("goodwe-table__border");
+        }
 
         return (
             <div class={cls}>
@@ -285,13 +292,13 @@ export default {
         table-layout: fixed;
         font-size: 14px;
         th {
-            border: 1px solid #ebeef5;
+            border-bottom: 1px solid #ebeef5;
             white-space: nowrap;
             padding: 15px 20px;
             color: #909399;
         }
         td {
-            border: 1px solid #ebeef5;
+            border-bottom: 1px solid #ebeef5;
             padding: 16px 15px;
             // word-wrap: break-word;
             // word-break: break-all;
@@ -304,15 +311,23 @@ export default {
         }
     }
     &__stripe {
-            table {
-                tbody {
-                    tr:nth-child(2n) {
-                        td {
-                            background-color: #fafafa;
-                        }
+        table {
+            tbody {
+                tr:nth-child(2n) {
+                    td {
+                        background-color: #fafafa;
                     }
                 }
             }
         }
+    }
+    &__border {
+        table {
+            th,
+            td {
+                border: 1px solid #ebeef5;
+            }
+        }
+    }
 }
 </style>

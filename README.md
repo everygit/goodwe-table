@@ -49,4 +49,4 @@ export default {
  height|暂不支持|string / number|-|-
  max-height|暂不支持|string / number |-|-
  stripe|是否为斑马纹 table|boolean|-|false
- border|是否带有纵向边框|boolean|-|false
+ border|是否带有纵向边框。 多级表头时固定为true|boolean|-|false
