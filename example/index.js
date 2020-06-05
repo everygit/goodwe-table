@@ -52,6 +52,11 @@ new Vue({
         GoodweTable,
         GoodweTableColumn
     },
+    methods: {
+        cellclick(row, column, cell, event) {
+            console.log(cell);
+        }
+    },
     mounted() {
         // setTimeout(() => {
         //     this.t = true
@@ -62,7 +67,11 @@ new Vue({
     },
     render(h) {
         return <div>
-            <goodwe-table data={this.d} show-header={true} stripe height="100px" max-height="200px">
+            <goodwe-table data={this.d} show-header={true}
+                on-cell-click={(row, col, cell, ev) => this.cellclick(row, col, cell, ev)}
+                on-row-click={(row, column) => console.log(row, column)}
+                stripe height="100px" max-height="200px">
+
                 <goodwe-table-column label="书名" prop="a"></goodwe-table-column>
                 <goodwe-table-column label="售价" prop="c">
                     <goodwe-table-column label="原价" prop="b" {

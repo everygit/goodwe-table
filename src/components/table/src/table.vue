@@ -8,7 +8,8 @@ export default {
             realColumns: [],
             headerLevel: 1,
             rowcols: [],
-            isMultiple: false
+            isMultiple: false,
+            selectedIndex: -1
         };
     },
     props: {
@@ -95,6 +96,9 @@ export default {
         treeProps: Object
     },
     watch: {
+        data() {
+            this.selectedIndex = -1;
+        },
         columns: {
             handler(v) {
                 this.updateLayout();
@@ -237,7 +241,14 @@ export default {
         },
         updateLayout: debounce(function() {
             this.getHeadData();
-        }, 10)
+        }, 10),
+        rowClick(row, column, rowIndex, colIndex, event) {
+            var oldIndex = this.selectedIndex;
+            this.selectedIndex = rowIndex;
+            this.$emit("row-click", row, column.column, event);
+            this.$emit("cell-click", row, column.column, event.target, event);
+            this.$emit('current-change', row, (this.data || [])[oldIndex]);
+        }
     },
     computed: {
         headerRender() {
@@ -248,9 +259,9 @@ export default {
         bodyRender() {
             if (this.data && this.data.length > 0) {
                 return this.data.map((d, i) => (
-                    <tr>
+                    <tr class={{ selected: i == this.selectedIndex }}>
                         {this.realColumns.map((c, idx) => (
-                            <td>
+                            <td on-click={e => this.rowClick(d, c, i, idx, e)}>
                                 {c.column.$scopedSlots.default
                                     ? c.column.$scopedSlots.default({
                                           row: d,
@@ -308,6 +319,16 @@ export default {
             td {
                 background-color: #f5f7fa;
             }
+            &.selected {
+                td {
+                    background-color: #edf5ff;
+                }
+            }
+        }
+        tr.selected {
+            td {
+                background-color: #edf5ff;
+            }
         }
         th {
             border-bottom: 1px solid #ebeef5;
@@ -340,6 +361,16 @@ export default {
                 tr:hover {
                     td {
                         background-color: #f5f7fa;
+                    }
+                    &.selected {
+                        td {
+                            background-color: #edf5ff;
+                        }
+                    }
+                }
+                tr.selected {
+                    td {
+                        background-color: #edf5ff;
                     }
                 }
             }
