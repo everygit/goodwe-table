@@ -289,7 +289,9 @@ export default {
             <div class={cls}>
                 <div>{this.$slots.default}</div>
                 <table class="goodwe-table-table">
-                    <thead>{this.headerRender}</thead>
+                    <thead>{
+                        this.showHeader ? this.headerRender : null
+                    }</thead>
                     <tbody>{this.bodyRender}</tbody>
                 </table>
             </div>
