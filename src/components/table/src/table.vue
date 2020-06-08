@@ -255,8 +255,8 @@ export default {
             if (c.width) {
                 r.width = parseFloat(c.width) + "px";
             }
-            if(c.minWidth) {
-                r['min-width'] = parseFloat(c.minWidth) + 'px';
+            if (c.minWidth) {
+                r["min-width"] = parseFloat(c.minWidth) + "px";
             }
             return r;
         },
@@ -287,22 +287,50 @@ export default {
                                 this.rowClassName({ row: d, rowIndex: i })
                         ]}
                     >
-                        {this.realColumns.map((c, idx) => (
-                            <td on-click={e => this.rowClick(d, c, i, idx, e)} style={this.tdStyle(d,c,i,idx)}>
-                                <div
-                                    class="goodwe-table-cell"
-                                    style={this.tdCellStyle(d, c, i, idx)}
+                        {this.realColumns.map((c, idx) => {
+                            var rowSpan = 1,
+                                colSpan = 1;
+                            if (this.spanMethod) {
+                                var spanResult = this.spanMethod({
+                                    row: d,
+                                    coloumn: c.column,
+                                    rowIndex: i,
+                                    columnIndex: idx
+                                });
+                                if (Array.isArray(spanResult)) {
+                                    [rowSpan, colSpan] = spanResult;
+                                } else {
+                                    rowSpan = spanResult.rowspan;
+                                    colSpan = spanResult.colspan;
+                                }
+                            }
+
+                            if(rowSpan == 0 || colSpan == 0) return null;
+
+                            return (
+                                <td
+                                    rowspan={rowSpan}
+                                    colspan={colSpan}
+                                    on-click={e =>
+                                        this.rowClick(d, c, i, idx, e)
+                                    }
+                                    style={this.tdStyle(d, c, i, idx)}
                                 >
-                                    {c.column.$scopedSlots.default
-                                        ? c.column.$scopedSlots.default({
-                                              row: d,
-                                              column: c.column,
-                                              $index: i
-                                          })
-                                        : d[c.column.prop]}
-                                </div>
-                            </td>
-                        ))}
+                                    <div
+                                        class="goodwe-table-cell"
+                                        style={this.tdCellStyle(d, c, i, idx)}
+                                    >
+                                        {c.column.$scopedSlots.default
+                                            ? c.column.$scopedSlots.default({
+                                                  row: d,
+                                                  column: c.column,
+                                                  $index: i
+                                              })
+                                            : d[c.column.prop]}
+                                    </div>
+                                </td>
+                            );
+                        })}
                     </tr>
                 ));
             } else {
@@ -421,7 +449,7 @@ export default {
             td {
                 border: 1px solid #ebeef5;
                 &:first-child {
-                    border-left:none;
+                    border-left: none;
                 }
                 &:last-child {
                     border-right: 1px solid transparent;
