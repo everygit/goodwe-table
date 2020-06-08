@@ -50,6 +50,7 @@ height|暂不支持|string / number|-|-
 max-height|暂不支持|string / number |-|-
 stripe|是否为斑马纹 table|boolean|-|false
 border|是否带有纵向边框。 多级表头时固定为true|boolean|-|false
+show-header|	是否显示表头|	boolean|	—|	true
 highlight-current-row|	是否要高亮当前行|	boolean| —|	false
 row-class-name|	行的 className 的回调方法，也可以使用字符串为所有行设置一个固定的 className。|	Function({row, rowIndex})/String|	—|	—
 

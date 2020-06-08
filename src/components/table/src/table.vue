@@ -48,7 +48,7 @@ export default {
             default: false
         },
         currentRowKey: [String, Number],
-        rowClassName: [Function, String],
+        rowClassName: Function,
         rowStyle: [Function, Object],
         cellClassName: [Function, String],
         cellStyle: [Function, Object],
@@ -248,6 +248,25 @@ export default {
             this.$emit("row-click", row, column.column, event);
             this.$emit("cell-click", row, column.column, event.target, event);
             this.$emit("current-change", row, (this.data || [])[oldIndex]);
+        },
+        tdCellStyle(row, column, rowIndex, colIndex) {
+            var r = {};
+            var c = column.column;
+            if (c.width) {
+                r.width = parseFloat(c.width) + "px";
+            }
+            if(c.minWidth) {
+                r['min-width'] = parseFloat(c.minWidth) + 'px';
+            }
+            return r;
+        },
+        tdStyle(row, column, rowIndex, colIndex) {
+            var r = {};
+            var c = column.column;
+            if (c.width) {
+                r.width = parseFloat(c.width) + "px";
+            }
+            return r;
         }
     },
     computed: {
@@ -261,19 +280,27 @@ export default {
                 return this.data.map((d, i) => (
                     <tr
                         class={[
-                            this.highlightCurrentRow && i == this.selectedIndex ? 'selected': '',
-                            this.rowClassName && this.rowClassName({row:d, rowIndex:i})
+                            this.highlightCurrentRow && i == this.selectedIndex
+                                ? "selected"
+                                : "",
+                            this.rowClassName &&
+                                this.rowClassName({ row: d, rowIndex: i })
                         ]}
                     >
                         {this.realColumns.map((c, idx) => (
-                            <td on-click={e => this.rowClick(d, c, i, idx, e)}>
-                                {c.column.$scopedSlots.default
-                                    ? c.column.$scopedSlots.default({
-                                          row: d,
-                                          column: c.column,
-                                          $index: i
-                                      })
-                                    : d[c.column.prop]}
+                            <td on-click={e => this.rowClick(d, c, i, idx, e)} style={this.tdStyle(d,c,i,idx)}>
+                                <div
+                                    class="goodwe-table-cell"
+                                    style={this.tdCellStyle(d, c, i, idx)}
+                                >
+                                    {c.column.$scopedSlots.default
+                                        ? c.column.$scopedSlots.default({
+                                              row: d,
+                                              column: c.column,
+                                              $index: i
+                                          })
+                                        : d[c.column.prop]}
+                                </div>
                             </td>
                         ))}
                     </tr>
@@ -290,7 +317,7 @@ export default {
         }
     },
     mounted() {
-        console.log(this.data);
+        // console.log(this.data);
     },
     render() {
         var cls = ["goodwe-table"];
@@ -315,6 +342,9 @@ export default {
 </script>
 <style lang="scss">
 .goodwe-table {
+    width: 100%;
+    overflow: auto;
+    position: relative;
     &-table {
         min-width: 100%;
         border-collapse: collapse;
@@ -343,17 +373,20 @@ export default {
         }
         td {
             border-bottom: 1px solid #ebeef5;
-            padding: 16px 15px;
-            // word-wrap: break-word;
-            // word-break: break-all;
             white-space: nowrap;
             color: #606266;
-
             &.no-data {
                 height: 50px;
                 text-align: center;
             }
         }
+    }
+    &-cell {
+        box-sizing: border-box;
+        padding: 16px 15px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
     &__stripe {
         table {
