@@ -165,9 +165,6 @@ export default {
         tdCellStyle(row, column, rowIndex, colIndex) {
             var r = {};
             var c = column.column;
-            if (c.width) {
-                r.width = parseFloat(c.width) + "px";
-            }
             if (c.minWidth) {
                 r["min-width"] = parseFloat(c.minWidth) + "px";
             }
@@ -182,7 +179,7 @@ export default {
             return r;
         },
         scrollChange(event) {
-            console.log(event);
+            // console.log(event);
         }
     },
     computed: {
@@ -273,6 +270,20 @@ export default {
             this.scrollChange,
             false
         );
+        
+    },
+    updated() {
+        var allTDs = this._vnode.elm.querySelectorAll(".goodwe-table__fixed");
+
+        allTDs.forEach(m => {
+            var isRight = m.classList.contains("goodwe-table__fixed--right");
+            if(!isRight) {
+                m.style.left = m.offsetLeft + 'px';
+            } else {
+                var r = this._vnode.elm.scrollWidth - m.offsetLeft - m.offsetWidth;
+                m.style.right = r + 'px';
+            }
+        })
     },
     render() {
         var cls = ["goodwe-table"];
@@ -401,7 +412,7 @@ export default {
     }
     &__fixed {
         position: sticky;
-        left: 0;
+        // left: 0;
         &:after {
             content: ' ';
             display: block;
@@ -414,7 +425,7 @@ export default {
         }
         &--right {
             left:auto;
-            right: 0;
+            // right: 0;
             &:after {
                 right:auto;
                 left:-30px;

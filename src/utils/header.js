@@ -31,7 +31,6 @@ export function getHeadData() {
         isFixed
     ) {
         columns.forEach((m, i) => {
-            console.log(m)
             if (m.columns.length > 0) {
                 _getHeadData(m.columns, curLevel + 1, m, m.fixed);
                 isMultiple = true;

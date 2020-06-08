@@ -1,6 +1,6 @@
 {
   "name": "goodwe-table",
-  "version": "0.3.1",
+  "version": "0.3.4",
   "main": "index.js",
   "description": "goodwe table, Extend the elmentUI",
   "scripts": {

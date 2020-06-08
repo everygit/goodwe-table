@@ -103,7 +103,7 @@ new Vue({
                 stripe height="100px" max-height="200px">
 
                 <goodwe-table-column label="书名" prop="a" width="200" fixed></goodwe-table-column>
-                <goodwe-table-column label="售价" prop="c">
+                <goodwe-table-column label="售价" prop="c" fixed>
                     <goodwe-table-column label="原价" min-width="150" prop="b" {
                         ...{
                             scopedSlots: {
@@ -127,7 +127,7 @@ new Vue({
                         <goodwe-table-column label="京东" prop="d"></goodwe-table-column>
                         <goodwe-table-column label="当当" prop="dd" max-width="300"></goodwe-table-column>
                     </goodwe-table-column>
-                    <goodwe-table-column label="线下" prop="sd">
+                    <goodwe-table-column label="线下" prop="sd" fixed="right">
                     </goodwe-table-column>
                 </goodwe-table-column>
                 <goodwe-table-column fixed="right" width="120" label="操作" {...{
