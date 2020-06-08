@@ -1,5 +1,6 @@
 <script>
 import debounce from "debounce";
+import { getChildrenCount, getHeadData } from "../../../utils/header";
 export default {
     name: "goodwe-table",
     data() {
@@ -124,96 +125,8 @@ export default {
         }
     },
     methods: {
-        getChildrenCount(columns) {
-            var l = 0;
-            var _getChildrenCount = function(c) {
-                if (c.length == 0) {
-                    l++;
-                } else {
-                    c.forEach(m => {
-                        if (m.columns.length > 0) {
-                            _getChildrenCount(m.columns);
-                        } else {
-                            l++;
-                        }
-                    });
-                }
-            };
-            _getChildrenCount(columns);
-            return l;
-        },
-        getHeadData() {
-            // 所有的列
-            var allColumns = [];
-            // 层级
-            var level = 1;
-            var isMultiple = false;
-            var _getHeadData = function _getHeadData(
-                columns,
-                curLevel,
-                parent
-            ) {
-                columns.forEach((m, i) => {
-                    if (m.columns.length > 0) {
-                        _getHeadData(m.columns, curLevel + 1, m);
-                        isMultiple = true;
-                    } else {
-                        level = Math.max(level, curLevel);
-                        allColumns.push({
-                            level: curLevel,
-                            column: m,
-                            parent: parent
-                        });
-                    }
-                });
-            }.bind(this);
-            _getHeadData(this.columns, 0);
-            this.realColumns = allColumns;
-            this.headerLevel = level;
-            this.isMultiple = isMultiple;
-            var rowcols = [];
-            var hasColspan = {};
-            for (var i = level; i >= 0; i--) {
-                var r = [];
-                var pre = rowcols[i + 1] || allColumns;
-                pre.forEach((m, idx) => {
-                    var c = m.column;
-                    var p = m.parent;
-                    var l = m.level;
-                    var rowspan = 1;
-                    var colspan = 1;
-                    if (i < m.level) {
-                        c = m.parent;
-                        p = c.$parent;
-                    }
-                    if (i == l) {
-                        rowspan = this.headerLevel - l + 1;
-                    } else {
-                        if (i > l) {
-                            rowspan = 0;
-                        }
-                    }
-                    if (hasColspan[i + "_" + c.id]) {
-                        colspan = 0;
-                    } else {
-                        colspan = this.getChildrenCount(c.columns);
-                        hasColspan[i + "_" + c.id] = true;
-                    }
-                    r[r.length] = {
-                        row: i,
-                        col: idx,
-                        column: c,
-                        parent: p,
-                        level: l,
-                        label: c.label,
-                        rowspan,
-                        colspan
-                    };
-                });
-                rowcols[i] = r;
-            }
-            this.rowcols = rowcols;
-        },
+        getChildrenCount,
+        getHeadData,
         remove(item) {
             var index = this.columns.indexOf(item);
             if (index > -1) {
@@ -229,7 +142,7 @@ export default {
                 return null;
             }
             return (
-                <th rowspan={r.rowspan} colspan={r.colspan}>
+                <th rowspan={r.rowspan} colspan={r.colspan} class={{'goodwe-table__fixed': !!r.isFixed, 'goodwe-table__fixed--right': r.isFixed == 'right'}}>
                     {r.column.$scopedSlots.header
                         ? r.column.$scopedSlots.header({
                               column: r.column,
@@ -267,6 +180,9 @@ export default {
                 r.width = parseFloat(c.width) + "px";
             }
             return r;
+        },
+        scrollChange(event) {
+            console.log(event);
         }
     },
     computed: {
@@ -305,7 +221,7 @@ export default {
                                 }
                             }
 
-                            if(rowSpan == 0 || colSpan == 0) return null;
+                            if (rowSpan == 0 || colSpan == 0) return null;
 
                             return (
                                 <td
@@ -315,6 +231,7 @@ export default {
                                         this.rowClick(d, c, i, idx, e)
                                     }
                                     style={this.tdStyle(d, c, i, idx)}
+                                    class={{'goodwe-table__fixed': !!c.isFixed, 'goodwe-table__fixed--right': c.isFixed == 'right'}}
                                 >
                                     <div
                                         class="goodwe-table-cell"
@@ -344,8 +261,18 @@ export default {
             }
         }
     },
+    beforeDestroy() {
+        this.$refs.goodweTableWrapper.removeEventListener(
+            "scroll",
+            this.scrollChange
+        );
+    },
     mounted() {
-        // console.log(this.data);
+        this.$refs.goodweTableWrapper.addEventListener(
+            "scroll",
+            this.scrollChange,
+            false
+        );
     },
     render() {
         var cls = ["goodwe-table"];
@@ -357,10 +284,12 @@ export default {
         }
 
         return (
-            <div class={cls}>
+            <div class={cls} ref="goodweTableWrapper">
                 <div>{this.$slots.default}</div>
                 <table class="goodwe-table-table">
-                    <thead>{this.showHeader ? this.headerRender : null}</thead>
+                    <thead>
+                        {this.showHeader ? this.headerRender : null}
+                    </thead>
                     <tbody>{this.bodyRender}</tbody>
                 </table>
             </div>
@@ -399,11 +328,14 @@ export default {
             white-space: nowrap;
             padding: 15px 20px;
             color: #909399;
+            background-color: #ffffff;
         }
         td {
             border-bottom: 1px solid #ebeef5;
             white-space: nowrap;
             color: #606266;
+            background-color: #ffffff;
+            padding: 0;
             &.no-data {
                 height: 50px;
                 text-align: center;
@@ -464,6 +396,29 @@ export default {
                 td {
                     border-bottom: none;
                 }
+            }
+        }
+    }
+    &__fixed {
+        position: sticky;
+        left: 0;
+        &:after {
+            content: ' ';
+            display: block;
+            position: absolute;
+            width:30px;
+            right:-30px;
+            top:0;
+            bottom:0;
+            box-shadow: inset 10px 0 8px -8px rgba(0,0,0,.15)
+        }
+        &--right {
+            left:auto;
+            right: 0;
+            &:after {
+                right:auto;
+                left:-30px;
+                box-shadow: inset -10px 0 8px -8px rgba(0,0,0,.15)
             }
         }
     }
