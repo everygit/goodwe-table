@@ -345,6 +345,7 @@ export default {
     width: 100%;
     overflow: auto;
     position: relative;
+    border: 1px solid #ebeef5;
     &-table {
         min-width: 100%;
         border-collapse: collapse;
@@ -419,6 +420,22 @@ export default {
             th,
             td {
                 border: 1px solid #ebeef5;
+                &:first-child {
+                    border-left:none;
+                }
+                &:last-child {
+                    border-right: 1px solid transparent;
+                }
+            }
+            tr:first-child {
+                th {
+                    border-top: none;
+                }
+            }
+            tr:last-child {
+                td {
+                    border-bottom: none;
+                }
             }
         }
     }
