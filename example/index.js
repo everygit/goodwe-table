@@ -62,24 +62,24 @@ new Vue({
             }
         },
         spanColums({ row, column, rowIndex, columnIndex }) {
-            if(rowIndex == 2 && columnIndex == 1) {
-                return [1, 2];
-            }
-            if(rowIndex == 2 && columnIndex == 2) {
-                return [0, 0];
-            }
-            if(rowIndex == 1 && columnIndex == 4) {
-                return {
-                    rowspan: 2,
-                    colspan: 1
-                }
-            }
-            if(rowIndex == 2 && columnIndex == 4) {
-                return {
-                    rowspan: 0,
-                    colspan: 0
-                }
-            }
+            // if(rowIndex == 2 && columnIndex == 1) {
+            //     return [1, 2];
+            // }
+            // if(rowIndex == 2 && columnIndex == 2) {
+            //     return [0, 0];
+            // }
+            // if(rowIndex == 1 && columnIndex == 4) {
+            //     return {
+            //         rowspan: 2,
+            //         colspan: 1
+            //     }
+            // }
+            // if(rowIndex == 2 && columnIndex == 4) {
+            //     return {
+            //         rowspan: 0,
+            //         colspan: 0
+            //     }
+            // }
 
             return [1, 1]
         }
@@ -95,7 +95,7 @@ new Vue({
     render(h) {
         return <div>
             <goodwe-table data={this.d} show-header={true}
-                highlight-current-row={true}
+                highlight-current-row={false}
                 row-class-name={this.rowclassname}
                 span-method={this.spanColums}
                 on-cell-click={(row, col, cell, ev) => this.cellclick(row, col, cell, ev)}

@@ -1,14 +1,18 @@
 # goodwe-table
 
+[![image](https://img.shields.io/npm/v/goodwe-table.svg)](https://www.npmjs.com/package/goodwe-table)
+[![](https://img.shields.io/npm/l/goodwe-table.svg)](https://www.npmjs.com/package/goodwe-table)
+[![](https://img.shields.io/github/issues/everygit/goodwe-table)](https://github.com/everygit/goodwe-table/issues)
+
 goodwe table, Extend the elmentUI
 
-## install
+## Install
 
 ```sh
 npm install goodwe-table
 ```
 
-## example
+## Example
 
 ```js
 import {Table as GoodweTable, TableColumn as GoodweTableColumn} from 'goodwe-table';
@@ -53,6 +57,7 @@ border|是否带有纵向边框。 多级表头时固定为true|boolean|-|false
 show-header|	是否显示表头|	boolean|	—|	true
 highlight-current-row|	是否要高亮当前行|	boolean| —|	false
 row-class-name|	行的 className 的回调方法，也可以使用字符串为所有行设置一个固定的 className。|	Function({row, rowIndex})/String|	—|	—
+span-method	|合并行或列的计算方法|	Function({ row, column, rowIndex, columnIndex })|	—|	—
 
 ## Table-column Scoped Slot
 
