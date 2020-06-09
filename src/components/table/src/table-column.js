@@ -1,4 +1,4 @@
-<script>
+
 var columnID = 10;
 export default {
     name: "goodwe-table-column",
@@ -46,7 +46,7 @@ export default {
         sortBy: [String, Array, Function],
         sortOrders: {
             type: Array,
-            default: function() {
+            default: function () {
                 return ["ascending", "descending", null];
             }
         },
@@ -103,7 +103,7 @@ export default {
         table() {
             var r = this;
             while (r) {
-                if(r.$options.name == "goodwe-table") {
+                if (r.$options.name == "goodwe-table") {
                     break;
                 }
                 r = r.$parent;
@@ -113,10 +113,10 @@ export default {
         parentColumn() {
             var r = this;
             var o = this;
-            while(r) {
+            while (r) {
                 o = r;
                 r = r.$parent;
-                if(r.$options.name == 'goodwe-table-column' || r.$options.name == 'goodwe-table') break;
+                if (r.$options.name == 'goodwe-table-column' || r.$options.name == 'goodwe-table') break;
             }
             return [r, o];
         }
@@ -136,4 +136,3 @@ export default {
         return <div>{this.$slots.default}</div>;
     }
 };
-</script>

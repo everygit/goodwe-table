@@ -2,7 +2,7 @@
 
 export function getChildrenCount(columns) {
     var l = 0;
-    var _getChildrenCount = function(c) {
+    (function _getChildrenCount(c) {
         if (c.length == 0) {
             l++;
         } else {
@@ -14,17 +14,22 @@ export function getChildrenCount(columns) {
                 }
             });
         }
-    };
-    _getChildrenCount(columns);
+    })(columns)
     return l;
 }
 
 
 export function getHeadData() {
-    var allColumns = [];
-    var level = 1;
-    var isMultiple = false;
-    var _getHeadData = function _getHeadData(
+    var allColumns = [],
+        level = 1,
+        isMultiple = false,
+        rowcols = [],
+        hasColspan = {};
+
+    // Get some information:
+    // All columns that show the data
+    // The levels of table's header
+    (function _getHeadData(
         columns,
         curLevel,
         parent,
@@ -40,18 +45,14 @@ export function getHeadData() {
                     level: curLevel,
                     column: m,
                     parent: parent,
-                    isFixed: isFixed || m.fixed 
+                    isFixed: isFixed || m.fixed
                 });
             }
         });
-    }.bind(this);
-    _getHeadData(this.columns, 0, null, false);
-    console.log(allColumns)
-    this.realColumns = allColumns;
-    this.headerLevel = level;
-    this.isMultiple = isMultiple;
-    var rowcols = [];
-    var hasColspan = {};
+    })(this.columns, 0, null, false);
+
+
+    // 
     for (var i = level; i >= 0; i--) {
         var r = [];
         var pre = rowcols[i + 1] || allColumns;
@@ -60,25 +61,33 @@ export function getHeadData() {
             var p = m.parent;
             var l = m.level;
             var isFixed = m.isFixed;
+
             var rowspan = 1;
             var colspan = 1;
+
             if (i < m.level) {
                 c = m.parent;
                 p = c.$parent;
             }
+
+
             if (i == l) {
-                rowspan = this.headerLevel - l + 1;
+                rowspan = level - l + 1;
             } else {
                 if (i > l) {
                     rowspan = 0;
                 }
             }
+
+
             if (hasColspan[i + "_" + c.id]) {
                 colspan = 0;
             } else {
-                colspan = this.getChildrenCount(c.columns);
+                colspan = getChildrenCount(c.columns);
                 hasColspan[i + "_" + c.id] = true;
             }
+
+
             r[r.length] = {
                 row: i,
                 col: idx,
@@ -93,5 +102,9 @@ export function getHeadData() {
         });
         rowcols[i] = r;
     }
+
+    this.realColumns = allColumns;
+    this.headerLevel = level;
+    this.isMultiple = isMultiple;
     this.rowcols = rowcols;
 }
