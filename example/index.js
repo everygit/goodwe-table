@@ -62,12 +62,12 @@ new Vue({
             }
         },
         spanColums({ row, column, rowIndex, columnIndex }) {
-            // if(rowIndex == 2 && columnIndex == 1) {
-            //     return [1, 2];
-            // }
-            // if(rowIndex == 2 && columnIndex == 2) {
-            //     return [0, 0];
-            // }
+            if(rowIndex == 2 && columnIndex == 1) {
+                return [1, 2];
+            }
+            if(rowIndex == 2 && columnIndex == 2) {
+                return [0, 0];
+            }
             // if(rowIndex == 1 && columnIndex == 4) {
             //     return {
             //         rowspan: 2,
@@ -95,6 +95,7 @@ new Vue({
     render(h) {
         return <div>
             <goodwe-table data={this.d} show-header={true}
+                scroll={0}
                 highlight-current-row={false}
                 row-class-name={this.rowclassname}
                 span-method={this.spanColums}
@@ -104,7 +105,7 @@ new Vue({
 
                 <goodwe-table-column label="书名" prop="a" width="200" fixed></goodwe-table-column>
                 <goodwe-table-column label="售价" prop="c" fixed>
-                    <goodwe-table-column label="原价" width="150" prop="b" {
+                    <goodwe-table-column label="原价" width="100" prop="b" {
                         ...{
                             scopedSlots: {
                                 'default': props => {
@@ -117,7 +118,7 @@ new Vue({
                         }
                     }>
                     </goodwe-table-column>
-                    <goodwe-table-column label="会员" prop="c" width="150"></goodwe-table-column>
+                    <goodwe-table-column label="会员" prop="c" width="100"></goodwe-table-column>
                     {
                         this.t ? <goodwe-table-column label="秒杀" prop="ms"></goodwe-table-column> : null
                     }
@@ -127,10 +128,10 @@ new Vue({
                         <goodwe-table-column label="京东" prop="d"></goodwe-table-column>
                         <goodwe-table-column label="当当" prop="dd" max-width="300"></goodwe-table-column>
                     </goodwe-table-column>
-                    <goodwe-table-column label="线下" prop="sd" fixed="right" width="150">
+                    <goodwe-table-column label="线下" prop="sd">
                     </goodwe-table-column>
                 </goodwe-table-column>
-                <goodwe-table-column fixed="right" width="120" label="操作" {...{
+                <goodwe-table-column width="120" fixed="right" label="操作" {...{
                     scopedSlots: {
                         'default': props => {
                             return <div>

@@ -2,8 +2,6 @@
 
 var mode = process.env.BUILD_TABLE;
 
-console.log(mode);
-
 module.exports = function(api) {
     api.cache(true);
     if(mode == "PROD") {

@@ -54,6 +54,8 @@ export function getHeadData() {
 
     stickyCell.call(this, allColumns);
 
+    getColumnsWidth.call(this, allColumns);
+
     // 
     for (var i = level; i >= 0; i--) {
         var r = [];
@@ -154,7 +156,8 @@ function stickyCell(cs) {
             }
             preWidth += parseFloat(cs[i].column.width);
         } else {
-            columnSticky[i + 1].isShadow = true;
+            if(columnSticky[i + 1])
+                columnSticky[i + 1].isShadow = true;
             break;
         }
     }
@@ -166,4 +169,24 @@ function stickyCell(cs) {
     this.stickyData = columnSticky || [];
 
     console.table(JSON.parse(JSON.stringify(columnSticky)))
+}
+
+
+function getColumnsWidth(columns) {
+    this.colWidth = columns.map((columnContainer, columnIndex) => {
+        var r = {
+            style: {},
+            attrs: {}
+        };
+        if(columnContainer.column.width) {
+            r.attrs.width  = r.style.width = parseFloat(columnContainer.column.width) + 'px';
+            
+        }
+        if(columnContainer.column.minWidth) {
+            r.style['min-width'] = parseFloat(columnContainer.column.minWidth) + 'px';
+        }
+        return r;
+    })
+
+    console.table(JSON.parse(JSON.stringify(this.colWidth)))
 }

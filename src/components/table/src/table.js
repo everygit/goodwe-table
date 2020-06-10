@@ -1,7 +1,7 @@
 
 import debounce from "debounce";
 import { getHeadData } from "../../../utils/header";
-import { getTableClass } from './attrs';
+import { getTableClass, getSpanValue } from './attrs';
 import props from './table-props';
 import render from './table-render';
 import '../../../base.scss'
@@ -16,7 +16,10 @@ export default {
             rowcols: [],
             isMultiple: false,
             selectedIndex: -1,
-            stickyData: []
+            stickyData: [],
+            colWidth: [],
+            isLeftShadow: false,
+            isRightShadow: false
         };
     },
     watch: {
@@ -74,8 +77,11 @@ export default {
             if (c.minWidth) {
                 r["min-width"] = parseFloat(c.minWidth) + "px";
             }
+            // 需要判断是否合并单元格
             if (c.width) {
-                r.width = parseFloat(c.width) + "px";
+                var [_, colspan] = getSpanValue.call(this, row, column, rowIndex, colIndex);
+                if (colspan == 1)
+                    r.width = parseFloat(c.width) - 1 + "px";
             }
             return r;
         },
@@ -87,8 +93,24 @@ export default {
             }
             return r;
         },
+        setShadowStyle() {
+            var l = this.$refs.goodweTableWrapper.scrollLeft;
+            var r = this.$refs.goodweTableWrapper.scrollWidth - this.$refs.goodweTableWrapper.clientWidth - l;
+
+            if(l == 0) {
+                this.isLeftShadow = false;
+            } else {
+                this.isLeftShadow = true;
+            }
+
+            if(r == 0) {
+                this.isRightShadow = false;
+            } else {
+                this.isRightShadow = true;
+            }
+        },
         scrollChange(event) {
-            // console.log(event);
+            this.setShadowStyle();
         }
     },
     computed: {
@@ -109,6 +131,13 @@ export default {
                     </tr>
                 );
             }
+        },
+        colgroupRender() {
+            return <colgroup>
+                {
+                    this.colWidth.map(m => (<col {...m}></col>))
+                }
+            </colgroup>
         }
     },
     beforeDestroy() {
@@ -125,18 +154,27 @@ export default {
         );
     },
     updated() {
+        this.setShadowStyle();
+        // this.$refs.goodwe_table.style.width =  this.$refs.goodwe_table.offsetWidth + 'px'
     },
     render(h) {
         var cls = getTableClass.call(this);
+        var tst = {};
+        if(this.scroll) {
+            tst.width = this.scroll + 'px';
+        }
         return (
-            <div class={cls} ref="goodweTableWrapper">
-                <div class="goodwe-table-hidden">{this.$slots.default}</div>
-                <table class="goodwe-table-table">
-                    <thead>
-                        {this.showHeader ? this.headerRender : null}
-                    </thead>
-                    <tbody>{this.bodyRender}</tbody>
-                </table>
+            <div class={cls}>
+                <div ref="goodweTableWrapper">
+                    <div class="goodwe-table-hidden">{this.$slots.default}</div>
+                    <table ref="goodwe_table" class="goodwe-table-table" style={tst}>
+                        {this.colgroupRender}
+                        <thead>
+                            {this.showHeader ? this.headerRender : null}
+                        </thead>
+                        <tbody>{this.bodyRender}</tbody>
+                    </table>
+                </div>
             </div>
         );
     }

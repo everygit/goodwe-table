@@ -3,7 +3,6 @@ const { VueLoaderPlugin } = require('vue-loader');
 const webpack = require('webpack');
 
 var outpath = path.resolve(__dirname, '..', 'all.js');
-console.log(outpath)
 
 module.exports = {
     entry:outpath,

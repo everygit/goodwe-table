@@ -80,6 +80,7 @@ export default {
         },
         lazy: Boolean,
         load: Function,
-        treeProps: Object
+        treeProps: Object,
+        scroll: Number
     }
 }

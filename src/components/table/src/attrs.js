@@ -9,6 +9,12 @@ export function getTableClass() {
     if (this.border || this.isMultiple) {
         cls.push("goodwe-table__border");
     }
+    if(this.isLeftShadow) {
+        cls.push('goodwe-table__left--shadow');
+    }
+    if(this.isRightShadow) {
+        cls.push('goodwe-table__right--shadow');
+    }
     return cls;
 }
 

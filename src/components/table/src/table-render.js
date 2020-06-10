@@ -14,6 +14,14 @@ export default {
                 style: {}
             };
 
+            if(r.column.width) {
+                attr.style.width = parseFloat(r.column.width) + 'px';
+            }
+
+            if(r.column.minWidth) {
+                attr.style['min-width'] = parseFloat(r.column.minWidth) + 'px';
+            }
+
             attrs.thTdStickySetting.call(this, attr, r.colspan, idx);
 
             return (
