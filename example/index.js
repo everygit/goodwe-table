@@ -104,7 +104,7 @@ new Vue({
 
                 <goodwe-table-column label="书名" prop="a" width="200" fixed></goodwe-table-column>
                 <goodwe-table-column label="售价" prop="c" fixed>
-                    <goodwe-table-column label="原价" min-width="150" prop="b" {
+                    <goodwe-table-column label="原价" width="150" prop="b" {
                         ...{
                             scopedSlots: {
                                 'default': props => {
@@ -117,7 +117,7 @@ new Vue({
                         }
                     }>
                     </goodwe-table-column>
-                    <goodwe-table-column label="会员" prop="c"></goodwe-table-column>
+                    <goodwe-table-column label="会员" prop="c" width="150"></goodwe-table-column>
                     {
                         this.t ? <goodwe-table-column label="秒杀" prop="ms"></goodwe-table-column> : null
                     }
@@ -127,7 +127,7 @@ new Vue({
                         <goodwe-table-column label="京东" prop="d"></goodwe-table-column>
                         <goodwe-table-column label="当当" prop="dd" max-width="300"></goodwe-table-column>
                     </goodwe-table-column>
-                    <goodwe-table-column label="线下" prop="sd" fixed="right">
+                    <goodwe-table-column label="线下" prop="sd" fixed="right" width="150">
                     </goodwe-table-column>
                 </goodwe-table-column>
                 <goodwe-table-column fixed="right" width="120" label="操作" {...{

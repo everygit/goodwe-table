@@ -37,20 +37,11 @@ export function getTableTdAttributes(row, columnContainer, rowIndex, columnIndex
         click: e => this.rowClick.apply(this, [...a, e])
     };
     ret.style = this.tdStyle.apply(this, a);
-    ret['class'] = getTableTdClass.apply(this, a);
+    ret['class'] = [];
+    thTdStickySetting.call(this, ret, colspan, columnIndex);
     return ret;
 }
 
-export function getTableTdClass(row, columnContainer, rowIndex, columnIndex) {
-    var cls = [];
-    if (columnContainer.isFixed) {
-        cls.push('goodwe-table__fixed');
-        if (columnContainer.isFixed == 'right') {
-            cls.push('goodwe-table__fixed--right')
-        }
-    }
-    return cls;
-}
 
 export function isHiddenTd(row, column, rowIndex, columnIndex) {
     var [rowspan, colspan] = getSpanValue.apply(this, [...arguments]);
@@ -84,4 +75,23 @@ export function getSpanValue(row, column, rowIndex, columnIndex) {
     }
 
     return [rowSpan, colSpan];
+}
+
+export function thTdStickySetting(attr, colspan, idx) {
+    var sticky = this.stickyData[idx];
+    if (sticky) {
+        attr['class'].push('goodwe-table__fixed');
+        if (sticky.isRight) {
+            attr['class'].push('goodwe-table__fixed--right');
+            attr.style.right = sticky.width + 'px';
+            if (sticky.isShadow) {
+                attr['class'].push("goodwe-table__shadow--right");
+            }
+        } else {
+            attr.style.left = sticky.width + 'px';
+            if (idx + colspan >= sticky.count) {
+                attr['class'].push("goodwe-table__shadow--left");
+            }
+        }
+    }
 }

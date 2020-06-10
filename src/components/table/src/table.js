@@ -1,12 +1,13 @@
 
 import debounce from "debounce";
-import { getChildrenCount, getHeadData } from "../../../utils/header";
-import * as attrs from './attrs';
+import { getHeadData } from "../../../utils/header";
+import { getTableClass } from './attrs';
 import props from './table-props';
+import render from './table-render';
 import '../../../base.scss'
 export default {
     name: "goodwe-table",
-    mixins: [props],
+    mixins: [props, render],
     data() {
         return {
             columns: [],
@@ -14,7 +15,8 @@ export default {
             headerLevel: 1,
             rowcols: [],
             isMultiple: false,
-            selectedIndex: -1
+            selectedIndex: -1,
+            stickyData: []
         };
     },
     watch: {
@@ -56,22 +58,6 @@ export default {
         add(item, index) {
             this.columns.splice(index, 0, item);
         },
-        renderHeaderItem(column, idx) {
-            var r = column;
-            if (r.rowspan == 0 || r.colspan == 0) {
-                return null;
-            }
-            return (
-                <th rowspan={r.rowspan} colspan={r.colspan} class={{ 'goodwe-table__fixed': !!r.isFixed, 'goodwe-table__fixed--right': r.isFixed == 'right' }}>
-                    {r.column.$scopedSlots.header
-                        ? r.column.$scopedSlots.header({
-                            column: r.column,
-                            $index: idx
-                        })
-                        : r.label}
-                </th>
-            );
-        },
         updateLayout: debounce(function () {
             this.getHeadData();
         }, 10),
@@ -87,6 +73,9 @@ export default {
             var c = column.column;
             if (c.minWidth) {
                 r["min-width"] = parseFloat(c.minWidth) + "px";
+            }
+            if (c.width) {
+                r.width = parseFloat(c.width) + "px";
             }
             return r;
         },
@@ -110,26 +99,7 @@ export default {
         },
         bodyRender() {
             if (this.data && this.data.length > 0) {
-                return this.data.map((d, i) => (
-                    <tr class={attrs.getTableBodyTrClass.call(this, d, i)}>
-                        {this.realColumns.map((c, idx) => {
-                            if (attrs.isHiddenTd.call(this, d, c.column, i, idx)) return null;
-                            return (
-                                <td  {...attrs.getTableTdAttributes.call(this, d, c, i, idx)}>
-                                    <div class="goodwe-table-cell" style={this.tdCellStyle(d, c, i, idx)}>
-                                        {c.column.$scopedSlots.default
-                                            ? c.column.$scopedSlots.default({
-                                                row: d,
-                                                column: c.column,
-                                                $index: i
-                                            })
-                                            : d[c.column.prop]}
-                                    </div>
-                                </td>
-                            );
-                        })}
-                    </tr>
-                ));
+                return this.data.map((d, i) => this.bodyTrRender(d, i));
             } else {
                 return (
                     <tr>
@@ -155,22 +125,12 @@ export default {
         );
     },
     updated() {
-        // var allTDs = this._vnode.elm.querySelectorAll(".goodwe-table__fixed");
-        // allTDs.forEach(m => {
-        //     var isRight = m.classList.contains("goodwe-table__fixed--right");
-        //     if (!isRight) {
-        //         m.style.left = m.offsetLeft + 'px';
-        //     } else {
-        //         var r = this._vnode.elm.scrollWidth - m.offsetLeft - m.offsetWidth;
-        //         m.style.right = r + 'px';
-        //     }
-        // })
     },
     render(h) {
-        var cls = attrs.getTableClass.call(this);
+        var cls = getTableClass.call(this);
         return (
             <div class={cls} ref="goodweTableWrapper">
-                <div>{this.$slots.default}</div>
+                <div class="goodwe-table-hidden">{this.$slots.default}</div>
                 <table class="goodwe-table-table">
                     <thead>
                         {this.showHeader ? this.headerRender : null}

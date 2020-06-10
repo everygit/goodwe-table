@@ -52,6 +52,8 @@ export function getHeadData() {
     })(this.columns, 0, null, false);
 
 
+    stickyCell.call(this, allColumns);
+
     // 
     for (var i = level; i >= 0; i--) {
         var r = [];
@@ -107,4 +109,61 @@ export function getHeadData() {
     this.headerLevel = level;
     this.isMultiple = isMultiple;
     this.rowcols = rowcols;
+}
+
+/**
+ * sticky info
+ * @param {array} cs columns
+ */
+function stickyCell(cs) {
+
+    var preWidth = 0;
+    var columnSticky = []
+
+    for (var i = 0; i < cs.length; i++) {
+        if (i == 0 && !cs[i].isFixed) break;
+        if (cs[i].isFixed) {
+            columnSticky[i] = {
+                width: preWidth,
+                isRight: false
+            }
+            if (!cs[i].column.width) {
+                throw new Error("[goodwe-table] Fixed columns need to provide width!")
+            }
+            preWidth += parseFloat(cs[i].column.width);
+        } else {
+            preWidth = 0;
+            break;
+        }
+    }
+
+    columnSticky.forEach(m => {
+        m.count = columnSticky.length
+    });
+
+    for (var i = cs.length - 1; i >= 0; i--) {
+        if (i == 0 && !cs[i].isFixed) break;
+        if(cs[i].isFixed) {
+            columnSticky[i] = {
+                width: preWidth,
+                isRight: true,
+                isShadow: false
+            }
+            if (!cs[i].column.width) {
+                throw new Error("[goodwe-table] Fixed columns need to provide width!")
+            }
+            preWidth += parseFloat(cs[i].column.width);
+        } else {
+            columnSticky[i + 1].isShadow = true;
+            break;
+        }
+    }
+
+    columnSticky.forEach(m => {
+        if(m.isRight) m.count = columnSticky.filter(m => m.isRight).length
+    })
+
+    this.stickyData = columnSticky || [];
+
+    console.table(JSON.parse(JSON.stringify(columnSticky)))
 }
