@@ -1,12 +1,14 @@
 {
   "name": "goodwe-table",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "main": "index.js",
   "description": "goodwe table, Extend the elmentUI",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env BUILD_TABLE=DEV webpack-dev-server --open --config build_config/webpack.config.js",
-    "build": "cross-env BUILD_TABLE=PROD webpack --config build_config/webpack.build.config.js"
+    "build": "cross-env BUILD_TABLE=PROD webpack --config build_config/webpack.build.config.js",
+    "prebuild": "node ./build_config/prebuild.js",
+    "prepublish": "node ./build_config/prepublish.js"
   },
   "author": "austin.sun",
   "license": "MIT",
