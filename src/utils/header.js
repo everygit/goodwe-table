@@ -51,6 +51,8 @@ export function getHeadData() {
         });
     })(this.columns, 0, null, false);
 
+    console.log(allColumns)
+
 
     stickyCell.call(this, allColumns);
 
@@ -130,6 +132,7 @@ function stickyCell(cs) {
                 isRight: false
             }
             if (!cs[i].column.width) {
+                console.log(cs[i].column)
                 throw new Error("[goodwe-table] Fixed columns need to provide width!")
             }
             preWidth += parseFloat(cs[i].column.width);
@@ -167,8 +170,6 @@ function stickyCell(cs) {
     })
 
     this.stickyData = columnSticky || [];
-
-    console.table(JSON.parse(JSON.stringify(columnSticky)))
 }
 
 
@@ -187,6 +188,4 @@ function getColumnsWidth(columns) {
         }
         return r;
     })
-
-    console.table(JSON.parse(JSON.stringify(this.colWidth)))
 }

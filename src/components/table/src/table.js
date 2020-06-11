@@ -1,10 +1,9 @@
-
-import debounce from "debounce";
+import '../../../base.scss'
 import { getHeadData } from "../../../utils/header";
 import { getTableClass, getSpanValue } from './attrs';
 import props from './table-props';
 import render from './table-render';
-import '../../../base.scss'
+
 export default {
     name: "goodwe-table",
     mixins: [props, render],
@@ -19,7 +18,9 @@ export default {
             stickyData: [],
             colWidth: [],
             isLeftShadow: false,
-            isRightShadow: false
+            isRightShadow: false,
+            observer: null,
+            updateLayoutTimer: null
         };
     },
     watch: {
@@ -61,9 +62,12 @@ export default {
         add(item, index) {
             this.columns.splice(index, 0, item);
         },
-        updateLayout: debounce(function () {
-            this.getHeadData();
-        }, 10),
+        updateLayout() {
+            clearTimeout(this.updateLayoutTimer);
+            this.updateLayoutTimer = setTimeout(() => {
+                this.getHeadData();
+            }, 10);
+        },
         rowClick(row, column, rowIndex, colIndex, event) {
             var oldIndex = this.selectedIndex;
             this.selectedIndex = rowIndex;
@@ -81,7 +85,10 @@ export default {
             if (c.width) {
                 var [_, colspan] = getSpanValue.call(this, row, column, rowIndex, colIndex);
                 if (colspan == 1)
-                    r.width = parseFloat(c.width) - 1 + "px";
+                    r["min-width"] = parseFloat(c.width) - 1 + "px";
+            }
+            if(c.align) {
+                r['text-align'] = c.align;
             }
             return r;
         },
@@ -97,19 +104,25 @@ export default {
             var l = this.$refs.goodweTableWrapper.scrollLeft;
             var r = this.$refs.goodweTableWrapper.scrollWidth - this.$refs.goodweTableWrapper.clientWidth - l;
 
-            if(l == 0) {
+            if (l == 0) {
                 this.isLeftShadow = false;
             } else {
                 this.isLeftShadow = true;
             }
 
-            if(r == 0) {
+            if (r == 0) {
                 this.isRightShadow = false;
             } else {
                 this.isRightShadow = true;
             }
         },
         scrollChange(event) {
+            this.setShadowStyle();
+        },
+        loadObject() {
+            this.$refs.goodwe_resize.contentDocument.defaultView.addEventListener('resize', this.resize)
+        },
+        resize() {
             this.setShadowStyle();
         }
     },
@@ -155,18 +168,18 @@ export default {
     },
     updated() {
         this.setShadowStyle();
-        // this.$refs.goodwe_table.style.width =  this.$refs.goodwe_table.offsetWidth + 'px'
     },
     render(h) {
         var cls = getTableClass.call(this);
         var tst = {};
-        if(this.scroll) {
+        if (this.scroll) {
             tst.width = this.scroll + 'px';
         }
         return (
             <div class={cls}>
-                <div ref="goodweTableWrapper">
+                <div ref="goodweTableWrapper" class="goodwe-table-w">
                     <div class="goodwe-table-hidden">{this.$slots.default}</div>
+                    <object ref="goodwe_resize" data="about:blank" tabindex="-1" type="text/html" on-load={this.loadObject} class="goodwe-table-resize"></object>
                     <table ref="goodwe_table" class="goodwe-table-table" style={tst}>
                         {this.colgroupRender}
                         <thead>

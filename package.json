@@ -19,7 +19,6 @@
     "url": "git+https://github.com/everygit/goodwe-table.git"
   },
   "dependencies": {
-    "debounce": "^1.2.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",

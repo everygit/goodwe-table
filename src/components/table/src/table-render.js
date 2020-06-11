@@ -21,6 +21,9 @@ export default {
             if(r.column.minWidth) {
                 attr.style['min-width'] = parseFloat(r.column.minWidth) + 'px';
             }
+            if(r.column.headerAlign) {
+                attr.style['text-align'] = r.column.headerAlign;
+            }
 
             attrs.thTdStickySetting.call(this, attr, r.colspan, idx);
 

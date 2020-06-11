@@ -45,7 +45,36 @@ new Vue({
     data() {
         return {
             d: d,
-            t: false
+            t: false,
+            p: [
+                {
+                    a: "围城",
+                    b:'钱钟书',
+                    c:'47.00',
+                    d: '人民文学出版社',
+                    e: '2019-01-01',
+                    f: '平装',
+                    g: 240
+                },
+                {
+                    a: '兄弟',
+                    b:'余华',
+                    c:'32.00',
+                    d:'南海出版公司',
+                    e: '2019-01-01',
+                    f: '精装',
+                    g: 300
+                },
+                {
+                    a: '白鹿原',
+                    b: '陈忠实',
+                    c: '35.00',
+                    d: '湖南文艺出版社',
+                    e: '2019-01-01',
+                    f: '礼盒',
+                    g:400
+                }
+            ]
         }
     },
     components: {
@@ -62,35 +91,30 @@ new Vue({
             }
         },
         spanColums({ row, column, rowIndex, columnIndex }) {
-            if(rowIndex == 2 && columnIndex == 1) {
+            if (rowIndex == 2 && columnIndex == 1) {
                 return [1, 2];
             }
-            if(rowIndex == 2 && columnIndex == 2) {
+            if (rowIndex == 2 && columnIndex == 2) {
                 return [0, 0];
             }
-            // if(rowIndex == 1 && columnIndex == 4) {
-            //     return {
-            //         rowspan: 2,
-            //         colspan: 1
-            //     }
-            // }
-            // if(rowIndex == 2 && columnIndex == 4) {
-            //     return {
-            //         rowspan: 0,
-            //         colspan: 0
-            //     }
-            // }
-
             return [1, 1]
+        },
+    },
+    computed: {
+        testRender() {
+            return <div>
+                {
+                    this.isShowLst ? (<ul>
+                        {this.lst.map(m => <li>{m}</li>)}
+                    </ul>) : null
+                }
+            </div>
         }
     },
     mounted() {
-        // setTimeout(() => {
-        //     this.t = true
-        // }, 3000);
-        // setTimeout(() => {
-        //     this.t = false
-        // }, 8000);
+        setTimeout(() => {
+            this.isShowLst = true;
+        }, 2000);
     },
     render(h) {
         return <div>
@@ -104,8 +128,8 @@ new Vue({
                 stripe height="100px" max-height="200px">
 
                 <goodwe-table-column label="书名" prop="a" width="200" fixed></goodwe-table-column>
-                <goodwe-table-column label="售价" prop="c" fixed>
-                    <goodwe-table-column label="原价" width="100" prop="b" {
+                <goodwe-table-column label="售价" prop="c" fixed header-align="center"  align="center">
+                    <goodwe-table-column label="原价" header-align="center"  align="center" width="100" prop="b" {
                         ...{
                             scopedSlots: {
                                 'default': props => {
@@ -118,7 +142,7 @@ new Vue({
                         }
                     }>
                     </goodwe-table-column>
-                    <goodwe-table-column label="会员" prop="c" width="100"></goodwe-table-column>
+                    <goodwe-table-column label="会员" header-align="center"  align="center" prop="c" width="100"></goodwe-table-column>
                     {
                         this.t ? <goodwe-table-column label="秒杀" prop="ms"></goodwe-table-column> : null
                     }
@@ -131,7 +155,7 @@ new Vue({
                     <goodwe-table-column label="线下" prop="sd">
                     </goodwe-table-column>
                 </goodwe-table-column>
-                <goodwe-table-column width="120" fixed="right" label="操作" {...{
+                <goodwe-table-column width="120" fixed="right" header-align="center" align="center" label="操作" {...{
                     scopedSlots: {
                         'default': props => {
                             return <div>
@@ -143,6 +167,16 @@ new Vue({
                 }}>
 
                 </goodwe-table-column>
+            </goodwe-table>
+            <h3>Example</h3>
+            <goodwe-table data={this.p}>
+                <goodwe-table-column label="书名" width="120" fixed prop="a"></goodwe-table-column>
+                <goodwe-table-column label="作者" prop="b"></goodwe-table-column>
+                <goodwe-table-column label="价格" prop="c"></goodwe-table-column>
+                <goodwe-table-column label="出版社" prop="d"></goodwe-table-column>
+                <goodwe-table-column label="出版时间" prop="e"></goodwe-table-column>
+                <goodwe-table-column label="包装" prop="f"></goodwe-table-column>
+                <goodwe-table-column label="页数" prop="g"></goodwe-table-column>
             </goodwe-table>
         </div>
     }
