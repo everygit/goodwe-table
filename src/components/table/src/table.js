@@ -20,7 +20,7 @@ export default {
             isLeftShadow: false,
             isRightShadow: false,
             observer: null,
-            updateLayoutTimer: null
+            updateLayoutTimer: null,
         };
     },
     watch: {
@@ -87,7 +87,7 @@ export default {
                 if (colspan == 1)
                     r["min-width"] = parseFloat(c.width) - 1 + "px";
             }
-            if(c.align) {
+            if (c.align) {
                 r['text-align'] = c.align;
             }
             return r;
@@ -124,6 +124,8 @@ export default {
         },
         resize() {
             this.setShadowStyle();
+            // safari bug fixed
+            this.$refs.goodweTableWrapper.scrollLeft = 0;
         }
     },
     computed: {
